@@ -37,6 +37,20 @@ while (true) {
     else System.out.println("Resposta invalida. Por favor, Responda apenas com 'Sim' ou 'Não' ");
 }
 
+// -- PROCESSAMENTO LOGICO --
+// -- S= ( ( P Ou Q ) E ~R) OU R --
+// -- O Sistema so acionara o toldo ou a irrigação se Não houver pragas --
+boolean acionarRegador = p && !r;
+boolean acionarToldo = q && !r;
+boolean acionarRepelente = r;
+
+// -- Saida Final Do Sistema --
+System.out.println("\n[RELATORIO DO SISTEMA] ");
+System.out.println("----------------------------------------------------------------");
+System.out.println("Irrigador:   " + (acionarRegador ? "[LIGADO]" : (p && r ? "[DESLIGADO - PRAGA DETECTADA]" : "[DESLIGADO]") ) );
+System.out.println("Toldo:      " + (acionarToldo ? "[ESTENDIDO]" : (q && r ? "[RECOLHIDO - PRAGA DETECTADA]" : "[RECOLHIDO]") ) );
+System.out.println("Repelente: " + (acionarRepelente ? "[DISPARANDO]" : "[AGUARDANDO]") );
+System.out.println("-----------------------------------------------------------------");
 
 
 
