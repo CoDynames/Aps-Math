@@ -5,14 +5,24 @@ public static void main(String[] args) {
 
 Scanner Lap = new Scanner(System.in);
 boolean p = false, q = false, r = false;
+String entrada;
+long tempoinicio;
 
 System.out.println("Responda com 'Sim' ou 'Não' os Sensores");
 
 
 // -- SENSOR P --
-String entrada;
 while (true) {
-     System.out.println("Sensor P - A terra esta seca? ");
+    System.out.println("Sensor P - A terra esta seca? ");
+    // -- Sensor de falta de resposta--
+tempoinicio = System.currentTimeMillis();
+while (!Lap.hasNextLine()) {
+    if (System. currentTimeMillis() - tempoinicio > 30000) { // So espera 30 segundos
+        System.out.println("\n[RESPOSTA NÃO DETECTADA] Reiniciando Sistema...");
+        main(args); // Reinicia o sistema
+        return;
+} 
+}  
      entrada = Lap.nextLine().trim();
      if (entrada.equalsIgnoreCase("Sim") || entrada.equalsIgnoreCase("S") ) {p = true; break;}
      else if (entrada.equalsIgnoreCase("Não") || entrada.equalsIgnoreCase("N") ) {p = false; break;}
@@ -22,6 +32,15 @@ while (true) {
 // -- SENSOR Q --
 while (true) {
     System.out.println("Sensor Q - O Sol esta Forte? ");
+// -- Sensor de falta de resposta--
+tempoinicio = System.currentTimeMillis();
+while (!Lap.hasNextLine()) {
+    if (System. currentTimeMillis() - tempoinicio > 30000) { // So espera 30 segundos
+        System.out.println("\n[RESPOSTA NÃO DETECTADA] Reiniciando Sistema...");
+        main(args); // Reinicia o sistema
+        return;
+} 
+}
     entrada = Lap.nextLine().trim();
     if (entrada.equalsIgnoreCase("Sim") || entrada.equalsIgnoreCase("S") ) {q = true; break;}
     else if (entrada.equalsIgnoreCase("Não") || entrada.equalsIgnoreCase("N") ) {q = false; break;}
@@ -31,6 +50,15 @@ while (true) {
 // -- SENSOR R --
 while (true) {
     System.out.println("Sensor R - Detectou Alguma Praga?");
+// -- Sensor de falta de resposta--
+tempoinicio = System.currentTimeMillis();
+while (!Lap.hasNextLine()) {
+    if (System. currentTimeMillis() - tempoinicio > 30000) { // So espera 30 segundos
+        System.out.println("\n[RESPOSTA NÃO DETECTADA] Reiniciando Sistema...");
+        main(args); // Reinicia o sistema
+        return;
+} 
+}
     entrada = Lap.nextLine().trim();
     if (entrada.equalsIgnoreCase("Sim") || entrada.equalsIgnoreCase("S")) {r = true; break;}
     else if (entrada.equalsIgnoreCase("Não") || entrada.equalsIgnoreCase("N")) {r = false; break;}
@@ -52,10 +80,27 @@ System.out.println("Toldo:      " + (acionarToldo ? "[ESTENDIDO]" : (q && r ? "[
 System.out.println("Repelente: " + (acionarRepelente ? "[DISPARANDO]" : "[AGUARDANDO]") );
 System.out.println("-----------------------------------------------------------------");
 
+// -- Detector de pragas --
+if (r) {
+    while (r) {
+    System.out.println("\nAs pragas foram eliminadas?");
+    entrada = Lap.nextLine().trim();
+    if (entrada.equalsIgnoreCase("Sim") || entrada.equalsIgnoreCase("S")) {
+        r = false; // pragas eliminadas
+        // Formulas com r sendo falso
+        acionarRegador = p && !r;
+        acionarToldo   = q && !r;
 
+        System.out.println("\n[PRAGAS ELIMINADAS] Atualizando Sistema...");
+        System.out.println("\n[AMBIENTE SEGURO INICIANDO PROTOCOLOS DE CUIDADO]");
+        System.out.println("irrigador" + (acionarRegador ? "[LIGADO]" : "[DESLIGADO]"));
+        System.out.println("Toldo"   + (acionarToldo ? " [ESTENDIDO]" : "[RECOLHIDO]"));
 
-
-
-}  
+    } else if (entrada.equalsIgnoreCase("Não") || entrada.equalsIgnoreCase("N")) {
+        System.out.println("\n[PRAGAS DETECTADAS] Iniciando Protocolos de Repelimento...");
+    }
+} 
+}
+}
 }
 
