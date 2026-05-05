@@ -11,59 +11,90 @@ long tempoinicio;
 System.out.println("Responda com 'Sim' ou 'Não' os Sensores");
 
 
-// -- SENSOR P --
+// -- SENSOR P ------------------------------------------------------------------------------------------------------------------------------------------------
 while (true) {
     System.out.println("Sensor P - A terra esta seca? ");
     // -- Sensor de falta de resposta--
-tempoinicio = System.currentTimeMillis();
-while (!Lap.hasNextLine()) {
-    if (System. currentTimeMillis() - tempoinicio > 30000) { // So espera 30 segundos
-        System.out.println("\n[RESPOSTA NÃO DETECTADA] Reiniciando Sistema...");
-        main(args); // Reinicia o sistema
-        return;
-} 
-}  
-     entrada = Lap.nextLine().trim();
-     if (entrada.equalsIgnoreCase("Sim") || entrada.equalsIgnoreCase("S") ) {p = true; break;}
-     else if (entrada.equalsIgnoreCase("Não") || entrada.equalsIgnoreCase("N") ) {p = false; break;}
-     else System.out.println("Resposta invalida. Por favor, Responda apenas com 'Sim' ou 'Não' "); 
+tempoinicio = System.currentTimeMillis(); // Reset do tempo
+
+try {
+    while (System.in.available() == 0) {
+       if (System.currentTimeMillis() - tempoinicio > 30000) {
+           System.out.println("\n[NENHUMA RESPOSTA DETECTADA] Reiniciando sistema");
+           main(args);
+           return;
+       }
+       Thread.sleep(100);
+    }
+} catch (Exception e) {}
+entrada = Lap.nextLine().trim();
+if (entrada.equalsIgnoreCase("Sim") || entrada.equalsIgnoreCase("S")) {
+    p = true;
+    break;
+} else if (entrada.equalsIgnoreCase("Não") || entrada.equalsIgnoreCase("N") || entrada.equalsIgnoreCase("Nao")) {
+    p = false;
+    break;
+} else {System.out.println("Resposta invalida Responda apenas com 'Sim' ou 'Não'");}
+
 }
 
-// -- SENSOR Q --
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+    
+// -- SENSOR Q -------------------------------------------------------------------------------------------------------------------------------------------------
 while (true) {
     System.out.println("Sensor Q - O Sol esta Forte? ");
 // -- Sensor de falta de resposta--
-tempoinicio = System.currentTimeMillis();
-while (!Lap.hasNextLine()) {
-    if (System. currentTimeMillis() - tempoinicio > 30000) { // So espera 30 segundos
-        System.out.println("\n[RESPOSTA NÃO DETECTADA] Reiniciando Sistema...");
-        main(args); // Reinicia o sistema
-        return;
-} 
-}
-    entrada = Lap.nextLine().trim();
-    if (entrada.equalsIgnoreCase("Sim") || entrada.equalsIgnoreCase("S") ) {q = true; break;}
-    else if (entrada.equalsIgnoreCase("Não") || entrada.equalsIgnoreCase("N") ) {q = false; break;}
-    else System.out.println("Resposta invalida. Por favor, Responda apenas com 'Sim' ou 'Não' ");
-}
+tempoinicio = System.currentTimeMillis(); // Reset do tempo
 
-// -- SENSOR R --
+try {
+    while (System.in.available() == 0) {
+       if (System.currentTimeMillis() - tempoinicio > 30000) {
+           System.out.println("\n[NENHUMA RESPOSTA DETECTADA] Reiniciando sistema");
+           main(args);
+           return;
+       }
+       Thread.sleep(100);
+    }
+} catch (Exception e) {}
+entrada = Lap.nextLine().trim();
+if (entrada.equalsIgnoreCase("Sim") || entrada.equalsIgnoreCase("S")) {
+    q = true;
+    break;
+} else if (entrada.equalsIgnoreCase("Não") || entrada.equalsIgnoreCase("N") || entrada.equalsIgnoreCase("Nao")) {
+    q = false;
+    break;
+} else {System.out.println("Resposta invalida Responda apenas com 'Sim' ou 'Não'");}
+
+}
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// -- SENSOR R -------------------------------------------------------------------------------------------------------------------------------------------------
 while (true) {
     System.out.println("Sensor R - Detectou Alguma Praga?");
 // -- Sensor de falta de resposta--
-tempoinicio = System.currentTimeMillis();
-while (!Lap.hasNextLine()) {
-    if (System. currentTimeMillis() - tempoinicio > 30000) { // So espera 30 segundos
-        System.out.println("\n[RESPOSTA NÃO DETECTADA] Reiniciando Sistema...");
-        main(args); // Reinicia o sistema
-        return;
-} 
+tempoinicio = System.currentTimeMillis(); // Reset do tempo
+
+try {
+    while (System.in.available() == 0) {
+       if (System.currentTimeMillis() - tempoinicio > 30000) {
+           System.out.println("\n[NENHUMA RESPOSTA DETECTADA] Reiniciando sistema");
+           main(args);
+           return;
+       }
+       Thread.sleep(100);
+    }
+} catch (Exception e) {}
+entrada = Lap.nextLine().trim();
+if (entrada.equalsIgnoreCase("Sim") || entrada.equalsIgnoreCase("S")) {
+    r = true;
+    break;
+} else if (entrada.equalsIgnoreCase("Não") || entrada.equalsIgnoreCase("N") || entrada.equalsIgnoreCase("Nao")) {
+    r = false;
+    break;
+} else {System.out.println("Resposta invalida Responda apenas com 'Sim' ou 'Não'");}
+
 }
-    entrada = Lap.nextLine().trim();
-    if (entrada.equalsIgnoreCase("Sim") || entrada.equalsIgnoreCase("S")) {r = true; break;}
-    else if (entrada.equalsIgnoreCase("Não") || entrada.equalsIgnoreCase("N")) {r = false; break;}
-    else System.out.println("Resposta invalida. Por favor, Responda apenas com 'Sim' ou 'Não' ");
-}
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // -- PROCESSAMENTO LOGICO --
 // -- S= ( ( P Ou Q ) E ~R) OU R --
@@ -95,6 +126,7 @@ if (r) {
         System.out.println("\n[AMBIENTE SEGURO INICIANDO PROTOCOLOS DE CUIDADO]");
         System.out.println("irrigador" + (acionarRegador ? "[LIGADO]" : "[DESLIGADO]"));
         System.out.println("Toldo"   + (acionarToldo ? " [ESTENDIDO]" : "[RECOLHIDO]"));
+        break;
 
     } else if (entrada.equalsIgnoreCase("Não") || entrada.equalsIgnoreCase("N")) {
         System.out.println("\n[PRAGAS DETECTADAS] Iniciando Protocolos de Repelimento...");
