@@ -4,12 +4,12 @@ public class APSMATH {
 public static void main(String[] args) {
 
 Scanner Lap = new Scanner(System.in);
-boolean p = false, q = false, r = false;
+boolean p = false, q = false, r = false, continuarSessao = true; 
 String entrada;
 long tempoinicio;
 
+do {
 System.out.println("Responda com 'Sim' ou 'Não' os Sensores");
-
 
 // -- SENSOR P ------------------------------------------------------------------------------------------------------------------------------------------------
 while (true) {
@@ -131,8 +131,23 @@ if (r) {
     } else if (entrada.equalsIgnoreCase("Não") || entrada.equalsIgnoreCase("N")) {
         System.out.println("\n[PRAGAS DETECTADAS] Iniciando Protocolos de Repelimento...");
     }
+//--Reiniciador de sistema------------------------------------------------------------------------------------------------------------------------------------------    
 } 
 }
-}
-}
+System.out.println("\n===========================================");
+System.out.println("Deseja realizar uma nova analise?");
+entrada = Lap.nextLine().trim();
 
+if (entrada.equalsIgnoreCase("Não") || entrada.equalsIgnoreCase("N") || entrada.equalsIgnoreCase("Nao")) {
+   continuarSessao = false;
+   System.out.println("Encerrando o Sistema... Ate logo!");
+   break;
+   
+} else if (entrada.equalsIgnoreCase("Sim") || entrada.equalsIgnoreCase("S")) {
+   continuarSessao = true;
+   System.out.println("Reiniciando Sistema......");
+}
+} while (continuarSessao);
+ Lap.close();
+}
+}
