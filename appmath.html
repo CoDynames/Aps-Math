@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>APS MATH - Sistema de Automação Agrícola Inteligente</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #e0f0e8 0%, #c8e0d4 100%);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Glassmorphism container principal */
+        .app-container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 48px;
+            box-shadow: 0 25px 45px rgba(0, 30, 0, 0.2), inset 0 1px 2px rgba(255,255,255,0.6);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Header estilizado */
+        .header {
+            background: #2d6a4f;
+            background: linear-gradient(135deg, #1b4d2e, #2d6a4f);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .header h1 span {
+            font-size: 2rem;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 8px;
+        }
+
+        /* Área de sensores */
+        .sensors-panel {
+            padding: 1.8rem 2rem;
+            background: #ffffffcc;
+            border-bottom: 1px solid #cfe3d9;
+        }
+
+        .sensor-card {
+            background: white;
+            border-radius: 32px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 6px 14px rgba(0, 20, 0, 0.05);
+            transition: transform 0.1s ease;
+            border: 1px solid #d4eade;
+        }
+
+        .sensor-title {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .sensor-badge {
+            background: #2d6a4f;
+            color: white;
+            font-weight: bold;
+            padding: 4px 14px;
+            border-radius: 60px;
+            font-size: 0.8rem;
+        }
+
+        .sensor-question {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #1f3b2c;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 18px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-sim, .btn-nao {
+            border: none;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #f0f4f2;
+            color: #1f3b2c;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .btn-sim {
+            background: #2c7a4d;
+            color: white;
+        }
+        .btn-sim:hover {
+            background: #1f5e3a;
+            transform: scale(0.97);
+        }
+        .btn-nao {
+            background: #bc6c25;
+            color: white;
+        }
+        .btn-nao:hover {
+            background: #9c5518;
+            transform: scale(0.97);
+        }
+
+        .btn-reset-sensor {
+            background: none;
+            border: none;
+            color: #56876d;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-left: 12px;
+            text-decoration: underline;
+        }
+
+        /* Relatório de saída */
+        .output-section {
+            padding: 1.8rem 2rem;
+            background: #fefcf5;
+        }
+
+        .report-card {
+            background: #1f2e28;
+            border-radius: 32px;
+            padding: 1.2rem;
+            color: #e9f5e6;
+            box-shadow: inset 0 1px 3px #00000020, 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .report-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 8px;
+            border-bottom: 1px solid #3c5548;
+            font-weight: 500;
+        }
+        .report-line:last-child {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            padding: 4px 16px;
+            border-radius: 38px;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+        .ligado, .estendido, .disparando {
+            background: #f4a261;
+            color: #2c2c2c;
+        }
+        .desligado, .recolhido, .aguardando {
+            background: #2f4b3c;
+            color: #cfe3d9;
+        }
+        .pragas-bloqueio {
+            background: #bc6c25;
+            color: white;
+        }
+
+        .pragas-message {
+            margin-top: 15px;
+            background: #a63e2c30;
+            padding: 12px;
+            border-radius: 28px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            justify-content: center;
+        }
+
+        .btn-nova-analise, .btn-eliminar-pragas {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-nova-analise {
+            background: #2d6a4f;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-eliminar-pragas {
+            background: #e9c46a;
+            color: #2d3e2c;
+            flex: 1;
+        }
+
+        .btn-nova-analise:hover, .btn-eliminar-pragas:hover {
+            filter: brightness(0.92);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            background: #e9f0ec;
+            padding: 12px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #456b59;
+        }
+
+        /* alerta interativo */
+        .toast-msg {
+            background: #2c553f;
+            color: white;
+            position: fixed;
+            bottom: 30px;
+            left: 20px;
+            right: 20px;
+            max-width: 360px;
+            margin: 0 auto;
+            padding: 12px;
+            border-radius: 60px;
+            text-align: center;
+            font-weight: 500;
+            box-shadow: 0 6px 14px black;
+            z-index: 1000;
+            opacity: 0;
+            transition: 0.2s;
+            pointer-events: none;
+        }
+
+        @media (max-width: 550px) {
+            .sensors-panel, .output-section {
+                padding: 1rem;
+            }
+            .button-group {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container" id="appRoot">
+    <div class="header">
+        <h1>
+            <span>🌾</span> APS MATH
+        </h1>
+        <p>Automação Inteligente · Toldos · Irrigação · Repelente</p>
+        <small>Lógica: ((P OU Q) E ~R) OU R</small>
+    </div>
+
+    <div class="sensors-panel">
+        <!-- Sensor P -->
+        <div class="sensor-card" data-sensor="p">
+            <div class="sensor-title">
+                <span class="sensor-badge">Sensor 🌱 P</span>
+                <span class="sensor-question">A terra está seca?</span>
+            </div>
+            <div class="button-group">
+                <button class="btn-sim" data-value="true">✅ Sim</button>
+                <button class="btn-nao" data-value="false">❌ Não</button>
+            </div>
+            <div style="font-size: 0.7rem; margin-top: 8px; color: #4a6b5c;" id="statusP">⚪ não respondido</div>
+        </div>
+
+        <!-- Sensor Q -->
+        <div class="sensor-card" data-sensor="q">
+            <div class="sensor-title">
+                <span class="sensor-badge">Sensor ☀️ Q</span>
+                <span class="sensor-question">O sol está forte?</span>
+            </div>
+            <div class="button-group">
+                <button class="btn-sim" data-value="true">✅ Sim</button>
+                <button class="btn-nao" data-value="false">❌ Não</button>
+            </div>
+            <div style="font-size: 0.7rem; margin-top: 8px; color: #4a6b5c;" id="statusQ">⚪ não respondido</div>
+        </div>
+
+        <!-- Sensor R -->
+        <div class="sensor-card" data-sensor="r">
+            <div class="sensor-title">
+                <span class="sensor-badge">Sensor 🐛 R</span>
+                <span class="sensor-question">Detectou alguma praga?</span>
+            </div>
+            <div class="button-group">
+                <button class="btn-sim" data-value="true">✅ Sim</button>
+                <button class="btn-nao" data-value="false">❌ Não</button>
+            </div>
+            <div style="font-size: 0.7rem; margin-top: 8px; color: #4a6b5c;" id="statusR">⚪ não respondido</div>
+        </div>
+    </div>
+
+    <div class="output-section">
+        <div class="report-card" id="reportArea">
+            <div class="report-line">
+                <span>💧 Irrigador:</span>
+                <span class="status-badge desligado" id="irrigadorStatus">—</span>
+            </div>
+            <div class="report-line">
+                <span>🏖️ Toldo:</span>
+                <span class="status-badge desligado" id="toldoStatus">—</span>
+            </div>
+            <div class="report-line">
+                <span>🦟 Repelente:</span>
+                <span class="status-badge desligado" id="repelenteStatus">—</span>
+            </div>
+            <div id="pragasMessage" class="pragas-message" style="display: none;">
+                ⚠️ PRAGAS DETECTADAS — Protocolos de Repelimento Ativos
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn-nova-analise" id="novaAnaliseBtn">🔄 Nova Análise</button>
+            <button class="btn-eliminar-pragas" id="eliminarPragasBtn">✅ Declarar Pragas Eliminadas</button>
+        </div>
+        <div style="font-size: 0.7rem; text-align: center; margin-top: 14px;">
+            * Após eliminar pragas, o sistema recalcula irrigador/toldo.
+        </div>
+    </div>
+    <div class="footer">
+        🧠 Lógica: S = ((P OU Q) E ~R) OU R | Irriga se (P e sem pragas) | Toldo se (Q e sem pragas)
+    </div>
+</div>
+<div id="toastMsg" class="toast-msg"></div>
+
+<script type="module">
+    // ---- LÓGICA TYPESCRIPT / JAVASCRIPT SIMULANDO O COMPORTAMENTO ORIGINAL ----
+    // Variáveis de estado
+    let p = false;      // terra seca
+    let q = false;      // sol forte
+    let r = false;      // pragas detectadas
+    let pRespondido = false;
+    let qRespondido = false;
+    let rRespondido = false;
+
+    // Elementos DOM
+    const statusPElem = document.getElementById('statusP');
+    const statusQElem = document.getElementById('statusQ');
+    const statusRElem = document.getElementById('statusR');
+    const irrigadorSpan = document.getElementById('irrigadorStatus');
+    const toldoSpan = document.getElementById('toldoStatus');
+    const repelenteSpan = document.getElementById('repelenteStatus');
+    const pragasMsgDiv = document.getElementById('pragasMessage');
+    const novaAnaliseBtn = document.getElementById('novaAnaliseBtn');
+    const eliminarPragasBtn = document.getElementById('eliminarPragasBtn');
+
+    // Função auxiliar para atualizar todos os status visuais e lógica de saída
+    function atualizarRelatorio() {
+        // Se algum sensor ainda não foi respondido, mostrar mensagem padrão
+        const todosRespondidos = pRespondido && qRespondido && rRespondido;
+        if (!todosRespondidos) {
+            irrigadorSpan.textContent = '⚠️ AGUARDANDO';
+            irrigadorSpan.className = 'status-badge aguardando';
+            toldoSpan.textContent = '⚠️ AGUARDANDO';
+            toldoSpan.className = 'status-badge aguardando';
+            repelenteSpan.textContent = '⚠️ AGUARDANDO';
+            repelenteSpan.className = 'status-badge aguardando';
+            pragasMsgDiv.style.display = 'none';
+            return;
+        }
+
+        // --- CÁLCULOS baseado na lógica original ---
+        // acionarRegador = p && !r   (irriga se terra seca e NÃO há pragas)
+        // acionarToldo = q && !r     (toldo estendido se sol forte e NÃO há pragas)
+        // acionarRepelente = r       (repelente se pragas detectadas)
+        const acionarRegador = p && !r;
+        const acionarToldo = q && !r;
+        const acionarRepelente = r;
+
+        // Atualizar textos e classes com mensagens do original (com detalhe de pragas bloqueando)
+        // Irrigador
+        if (acionarRegador) {
+            irrigadorSpan.textContent = '💧 LIGADO';
+            irrigadorSpan.className = 'status-badge ligado';
+        } else {
+            if (p && r) {
+                irrigadorSpan.textContent = '🔴 DESLIGADO - PRAGA DETECTADA';
+                irrigadorSpan.className = 'status-badge pragas-bloqueio';
+            } else {
+                irrigadorSpan.textContent = '⚫ DESLIGADO';
+                irrigadorSpan.className = 'status-badge desligado';
+            }
+        }
+
+        // Toldo
+        if (acionarToldo) {
+            toldoSpan.textContent = '🏖️ ESTENDIDO';
+            toldoSpan.className = 'status-badge estendido';
+        } else {
+            if (q && r) {
+                toldoSpan.textContent = '🔴 RECOLHIDO - PRAGA DETECTADA';
+                toldoSpan.className = 'status-badge pragas-bloqueio';
+            } else {
+                toldoSpan.textContent = '📦 RECOLHIDO';
+                toldoSpan.className = 'status-badge recolhido';
+            }
+        }
+
+        // Repelente
+        if (acionarRepelente) {
+            repelenteSpan.textContent = '💨 DISPARANDO';
+            repelenteSpan.className = 'status-badge disparando';
+            pragasMsgDiv.style.display = 'block';
+            pragasMsgDiv.innerHTML = '⚠️ 🐛 PRAGAS ATIVAS! Repelente em ação. Use o botão "Declarar Pragas Eliminadas" quando não houver mais ameaça.';
+        } else {
+            repelenteSpan.textContent = '✅ AGUARDANDO';
+            repelenteSpan.className = 'status-badge aguardando';
+            pragasMsgDiv.style.display = 'none';
+        }
+    }
+
+    // Função que mostra um toast temporário
+    function mostrarToast(mensagem, duracao = 3000) {
+        const toast = document.getElementById('toastMsg');
+        toast.textContent = mensagem;
+        toast.style.opacity = '1';
+        toast.style.pointerEvents = 'none';
+        setTimeout(() => {
+            toast.style.opacity = '0';
+        }, duracao);
+    }
+
+    // Atualizar texto dos sensores (indicadores de resposta)
+    function atualizarLabelsSensores() {
+        statusPElem.innerHTML = pRespondido ? (p ? '🌱🌾 Terra seca = SIM' : '💧 Terra seca = NÃO') : '⚡ aguardando resposta';
+        statusQElem.innerHTML = qRespondido ? (q ? '☀️ Sol forte = SIM' : '🌤️ Sol forte = NÃO') : '⚡ aguardando resposta';
+        statusRElem.innerHTML = rRespondido ? (r ? '🐛 Praga = SIM (ATIVA)' : '✅ Praga = NÃO') : '⚡ aguardando resposta';
+    }
+
+    // Função para definir resposta do sensor (com tratamento)
+    function definirSensor(sensorId, valorBooleano) {
+        if (sensorId === 'p') {
+            p = valorBooleano;
+            pRespondido = true;
+            mostrarToast(`Sensor P: ${valorBooleano ? 'Terra seca ✅' : 'Terra úmida ❌'}`, 1500);
+        } else if (sensorId === 'q') {
+            q = valorBooleano;
+            qRespondido = true;
+            mostrarToast(`Sensor Q: ${valorBooleano ? 'Sol forte ☀️' : 'Sol moderado 🌥️'}`, 1500);
+        } else if (sensorId === 'r') {
+            r = valorBooleano;
+            rRespondido = true;
+            if (r) {
+                mostrarToast('⚠️ PRAGAS DETECTADAS! Repelente será ativado.', 2000);
+            } else {
+                mostrarToast('✅ Ambiente livre de pragas.', 1500);
+            }
+        }
+        atualizarLabelsSensores();
+        atualizarRelatorio();   // sempre que definir sensor, atualiza
+    }
+
+    // Reiniciar a análise (limpa todas respostas e reseta flags)
+    function novaAnaliseCompleta() {
+        p = false;
+        q = false;
+        r = false;
+        pRespondido = false;
+        qRespondido = false;
+        rRespondido = false;
+        atualizarLabelsSensores();
+        atualizarRelatorio();
+        mostrarToast('🔄 Sistema reiniciado. Responda os sensores novamente.', 2000);
+        // também redefinir qualquer status extra de pragas eliminadas lógicas, mas o r já falso
+    }
+
+    // Ação de eliminar pragas: semelhante ao código Java quando usuário confirma que pragas foram eliminadas
+    // No original: "As pragas foram eliminadas?" se Sim: r = false e recalcula acionarRegador/aciornarToldo.
+    // Aqui implementamos como se o usuário disparasse a eliminação manual, equivalente a setar r = false e manter os valores p/q já respondidos.
+    function eliminarPragas() {
+        if (!rRespondido || !r) {
+            mostrarToast('Nenhuma praga ativa detectada ou já inexistente.', 1800);
+            return;
+        }
+        // Simula eliminação das pragas
+        r = false;
+        rRespondido = true;   // mantém respondido com novo estado
+        atualizarLabelsSensores();
+        atualizarRelatorio();  // agora recalcula irrigador/toldo com r = false
+        mostrarToast('✅ PRAGAS ELIMINADAS! Ambiente seguro. Irrigador/Toldo recalculados.', 2500);
+        // Adicional: conforme código original mostra mensagem de protocolos de cuidado.
+    }
+
+    // Configurar eventos dos botões nos cards sensores
+    function configurarBotoesSensores() {
+        // sensor P buttons
+        const pCard = document.querySelector('[data-sensor="p"]');
+        const pSim = pCard.querySelector('.btn-sim');
+        const pNao = pCard.querySelector('.btn-nao');
+        pSim.addEventListener('click', () => definirSensor('p', true));
+        pNao.addEventListener('click', () => definirSensor('p', false));
+
+        const qCard = document.querySelector('[data-sensor="q"]');
+        const qSim = qCard.querySelector('.btn-sim');
+        const qNao = qCard.querySelector('.btn-nao');
+        qSim.addEventListener('click', () => definirSensor('q', true));
+        qNao.addEventListener('click', () => definirSensor('q', false));
+
+        const rCard = document.querySelector('[data-sensor="r"]');
+        const rSim = rCard.querySelector('.btn-sim');
+        const rNao = rCard.querySelector('.btn-nao');
+        rSim.addEventListener('click', () => definirSensor('r', true));
+        rNao.addEventListener('click', () => definirSensor('r', false));
+    }
+
+    // Eventos dos botões principais
+    function configurarBotoesGerais() {
+        novaAnaliseBtn.addEventListener('click', () => {
+            novaAnaliseCompleta();
+        });
+        eliminarPragasBtn.addEventListener('click', () => {
+            // verifica se as pragas estão realmente ativas no sistema.
+            if (rRespondido && r === true) {
+                eliminarPragas();
+            } else if (!rRespondido) {
+                mostrarToast('Nenhuma análise concluída. Responda o sensor de pragas primeiro.', 2000);
+            } else if (rRespondido && r === false) {
+                mostrarToast('Não há pragas ativas no momento!', 1800);
+            } else {
+                mostrarToast('Sem pragas ativas para eliminar.', 1500);
+            }
+        });
+    }
+
+    // Inicializar tudo e também implementar simulação de "timeout/resposta" não precisamos pois é interativo
+    // Porém a experiência web não precisa de timeout pois aguarda clique.
+    // (Opcional: validação de fluxo igual original: se usuário não responder praga, não avança, mas aqui os botões independentes)
+    // Adicional: exibição completa do relatório lógico baseado exatamente nas fórmulas.
+
+    // Fazer uma pequena checagem inicial
+    function init() {
+        configurarBotoesSensores();
+        configurarBotoesGerais();
+        // iniciar estado vazio
+        novaAnaliseCompleta(); // garante tudo limpo e texto de aguardando
+        // Título adicional manualmente via estilo
+        console.log("Sistema APS MATH web ativo - Lógica agrícola adaptada");
+    }
+
+    init();
+
+    // EXTRA: fornece a experiência de "reiniciar sistema" como o método main recursivo, mas web não precisa.
+    // Incluímos também uma maneira de apresentar a expressão lógica original.
+    // Tudo consome as variáveis p,q,r e aplica as regras: irrigador(p && !r), toldo(q && !r), repelente(r)
+    // Feedback extra quando houver pragas bloqueando toldo/irrigador, como no java.
+    // Adicionamos detalhe na mensagem do relatório para ficar idêntico ao estilo original.
+
+    // ajuste extra: quando r = false e p ou q respondidos, mostramos mensagem correta.
+    // foi totalmente implementada.
+    // Simula também o comportamento do loop de pragas "foram eliminadas?" via botão dedicado.
+    // Pronto.
+</script>
+</body>
+</html>
