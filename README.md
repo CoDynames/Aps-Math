@@ -2,7 +2,7 @@
 
 Este projeto foi desenvolvido como **Atividade Prática Supervisionada (APS)** para a disciplina de **Lógica Matemática**. O sistema utiliza os fundamentos da Álgebra de Boole para controlar um jardim inteligente, integrando lógica de sensores com execução em **Java**.
 
-## 🧠 Proposição Lógica de Controle
+## Proposição Lógica de Controle
 
 O motor de decisão do sistema é baseado na seguinte expressão lógica, que equilibra a necessidade de manutenção da planta com a segurança contra pragas:
 
@@ -15,7 +15,7 @@ $$((P \lor Q) \land \neg R) \lor R$$
 
 ---
 
-## 📊 Tabela Verdade com Retorno do Sistema
+## 📊 Tabela Verdade
 
 A tabela abaixo segue a **ordem canônica** e inclui a interpretação das ações que o sistema Java executa para cada combinação de sensores.
 
@@ -32,7 +32,7 @@ A tabela abaixo segue a **ordem canônica** e inclui a interpretação das açõ
 
 ---
 
-## 🚀 Implementação em Java
+## Implementação em Java
 
 A expressão lógica foi implementada de forma direta no código. Note como o sistema diferencia se o resultado `true` veio da necessidade de cuidado ou da presença de uma praga:
 
